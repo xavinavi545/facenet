@@ -22,7 +22,7 @@ def register_face(image, db, name):
             return {"error": "No se detectó un rostro"}
 
         # Generar la incrustación (embedding)
-        embedding = model(aligned_face.unsqueeze(0)).detach().numpy()
+        embedding = model(aligned_face.unsqueeze(0)).squeeze().detach().numpy()
 
         # Guardar el perfil en la base de datos
         save_profile(db, name, embedding)
@@ -43,11 +43,12 @@ def verify_face(image, db):
             return {"error": "No se detectó un rostro"}
 
         # Generar la incrustación (embedding)
-        embedding = model(aligned_face.unsqueeze(0)).detach().numpy()
+        embedding = model(aligned_face.unsqueeze(0)).squeeze().detach().numpy()
 
         # Obtener perfiles de la base de datos
         profiles = get_all_profiles(db)
         for profile in profiles:
+            print(profile.embedding.shape)
             # Comparar el embedding con los perfiles registrados
             distance = euclidean(embedding, profile.embedding)
             if distance < 0.6:  # Umbral de coincidencia

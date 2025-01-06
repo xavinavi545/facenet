@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, Column, String, LargeBinary, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+import numpy as np
 from dotenv import load_dotenv
 
 # Cargar las variables de entorno
@@ -38,4 +39,8 @@ def save_profile(db, name, embedding):
     db.commit()
 
 def get_all_profiles(db):
-    return db.query(Profile).all()
+    profiles = db.query(Profile).all()
+    for profile in profiles:
+        # Convertir de bytes a un arreglo NumPy de tipo float32
+        profile.embedding = np.frombuffer(profile.embedding, dtype=np.float32)
+    return profiles
