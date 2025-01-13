@@ -9,8 +9,8 @@ services:
     depends_on:
       - db-ia
     volumes:
-      - .:/app  # Montar el directorio actual en /app dentro del contenedor
-      - /app/__pycache__  # Evitar que los archivos __pycache__ se monten en el host
+      - .:/app  # Monta todo el código fuente en el contenedor
+      - /app/__pycache__  # Evita que los archivos de caché se monten en el host
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db-ia:5432/mydatabase
 
@@ -25,6 +25,19 @@ services:
       POSTGRES_DB: mydatabase
     volumes:
       - postgres_data_ia:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./facenet-frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-ia
+    volumes:
+      - ./facenet-frontend:/app  # Monta el código fuente local en el contenedor
+      - /app/node_modules        # Evita que los node_modules locales interfieran
 
 volumes:
   postgres_data_ia:

@@ -1,7 +1,17 @@
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 from app.routes import register, verify
 
 app = FastAPI()
+
+# Agregar Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Cambia esto si el frontend usa otra URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos los encabezados
+)
 
 router = APIRouter()
 
@@ -16,7 +26,6 @@ def hello():
 
 # Incluir el router en la aplicación principal
 app.include_router(router)
-
 
 
 # Iniciar la aplicación

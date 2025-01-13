@@ -3,6 +3,10 @@
 .mypy_cache
 .vscode
 __pycache__
+__pycache__/
+.git/
+node_modules/
+*.log
 .pytest_cache
 htmlcov
 dist
