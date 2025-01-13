@@ -1,0 +1,28 @@
+services:
+  backend-ia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend_ia
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-ia
+    volumes:
+      - .:/app  # Montar el directorio actual en /app dentro del contenedor
+      - /app/__pycache__  # Evitar que los archivos __pycache__ se monten en el host
+
+  db-ia:
+    image: postgres:15
+    container_name: postgres-db-ia
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data_ia:/var/lib/postgresql/data
+
+volumes:
+  postgres_data_ia:

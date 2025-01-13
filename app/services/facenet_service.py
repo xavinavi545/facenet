@@ -1,14 +1,8 @@
-from facenet_pytorch import InceptionResnetV1, MTCNN
 from scipy.spatial.distance import euclidean
-from backend.database.profiles import save_profile, get_all_profiles
+from app.services.profile_service import save_profile, get_all_profiles
 from PIL import Image
 from io import BytesIO
-
-# Cargar el modelo FaceNet
-model = InceptionResnetV1(pretrained='vggface2').eval()
-
-# Inicializar el detector de rostros
-mtcnn = MTCNN(image_size=160)
+from app.models.facenet import mtcnn, model
 
 # Registrar rostro
 def register_face(image, db, name):

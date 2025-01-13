@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, Depends
-from backend.models.facenet import register_face
-from backend.database.profiles import get_db
+from app.services.facenet_service import register_face
+from app.config.database import get_db
 
 router = APIRouter()
 
