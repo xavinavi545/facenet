@@ -3,9 +3,10 @@ from app.services.profile_service import save_profile, get_all_profiles
 from PIL import Image
 from io import BytesIO
 from app.models.facenet import mtcnn, model
+from sqlalchemy.orm import Session
 
 # Registrar rostro
-def register_face(image, db, name):
+def register_face(image, db: Session, name):
     try:
         # Convertir bytes a imagen PIL
         pil_image = Image.open(BytesIO(image))
@@ -26,7 +27,7 @@ def register_face(image, db, name):
         return {"error": str(e)}
 
 # Verificar rostro
-def verify_face(image, db):
+def verify_face(image, db: Session):
     try:
         # Convertir la imagen de bytes a formato PIL
         pil_image = Image.open(BytesIO(image))

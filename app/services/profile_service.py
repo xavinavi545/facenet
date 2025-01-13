@@ -1,7 +1,8 @@
+from sqlalchemy.orm import Session
 from app.models.profile import Profile
 import numpy as np
 
-def save_profile(db, name, embedding):
+def save_profile(db: Session, name: str, embedding):
     profile = Profile(name=name, embedding=embedding)
     db.add(profile)
     db.commit()

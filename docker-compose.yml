@@ -11,6 +11,8 @@ services:
     volumes:
       - .:/app  # Montar el directorio actual en /app dentro del contenedor
       - /app/__pycache__  # Evitar que los archivos __pycache__ se monten en el host
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db-ia:5432/mydatabase
 
   db-ia:
     image: postgres:15
