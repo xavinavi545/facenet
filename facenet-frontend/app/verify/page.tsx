@@ -1,13 +1,10 @@
 "use client";
 
 import VerifyForm from "./components/VerifyForm";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 export default function VerifyPage() {
   return (
     <>
-      <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <h1 className="text-3xl font-bold mb-8">Verificación de Rostros</h1>
         <VerifyForm />
@@ -18,7 +15,6 @@ export default function VerifyPage() {
           Regresar
         </button>
       </div>
-      <Footer />
     </>
   );
 }

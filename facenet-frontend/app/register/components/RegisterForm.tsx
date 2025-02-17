@@ -3,8 +3,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Loading from "../../components/Loading";
 
+interface RegisterProps {
+  isClosed: boolean;
+}
 
-export default function RegisterForm() {
+export default function RegisterForm({ 
+  isClosed,
+}: RegisterProps) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -77,6 +82,17 @@ export default function RegisterForm() {
     };
   }, [captureFrame, isCameraOpen]);
 
+  useEffect(() => {
+    if (isClosed) {
+      const video = videoRef.current;
+      if (video && video.srcObject) {
+        const stream = video.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+        video.srcObject = null;
+      }
+    }
+  }, [isClosed]);
+
   const openCamera = async () => {
     setIsCameraOpen(true);
     setMessage("");
@@ -108,27 +124,27 @@ export default function RegisterForm() {
               placeholder="Nombre"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border p-2 mb-4"
-              required
+              className="rounded border border-gray-500 p-2 mb-4 text-gray-700"
+              // required
             />
             {!isCameraOpen && (
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-black text-white px-4 py-2 rounded border hover:bg-stone-100 hover:text-black  hover:border-black"
               >
                 Abrir Cámara
               </button>
             )}
           </form>
           {isCameraOpen && (
-            <div>
+            <div className="flex flex-col items-center">
               <video
                 ref={videoRef}
                 autoPlay
-                className="mb-4 w-64 h-48 border"
+                className="mt-8 mb-4 w-auto h-48 rounded border-2 border-black"
               ></video>
               <canvas ref={canvasRef} className="hidden" width={640} height={480} />
-              <p className="text-center">
+              <p className="text-black text-center">
                 Presiona <span className="font-bold">Espacio</span> para capturar la
                 imagen o <span className="font-bold">Q</span> para cancelar.
               </p>

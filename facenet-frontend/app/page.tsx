@@ -1,36 +1,40 @@
 "use client";
 
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const router = useRouter();
 
   return (
-    <>
-      <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <h1 className="text-4xl font-bold mb-4">Bienvenido a Facenet</h1>
-        <p className="mb-8 text-lg text-gray-600">
-          Registra o verifica rostros con nuestra aplicación.
-        </p>
-        <div className="flex gap-8">
-          <button
-            onClick={() => router.push("/register")}
-            className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600"
-          >
-            Registrar Rostro
-          </button>
-          <button
-            onClick={() => router.push("/verify")}
-            className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600"
-          >
-            Verificar Rostro
-          </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex flex-col items-center space-y-10 w-10/12 md:w-2/4 mb-16">
+          <p className="text-3xl font-medium text-black text-center">
+            Registrar rostros de manera rápida y segura
+          </p>
+          <p className="mb-20 text-lg px-10 text-black text-center">
+            FacePod es una solución innovadora que lleva el poder de la inteligencia artificial al alcance de todos. 
+            A diferencia de los sistemas tradicionales que dependen de grandes volúmenes de datos y costosos servidores, 
+            FacePod se basa en Small Data, permitiendo entrenar modelos de manera rápida, eficiente y económica.
+          </p>
+        </div>
+        <div>
+          <div className="flex flex-row items-center justify-center space-x-4">
+            <button
+              onClick={() => router.push("/register")}
+              className="bg-black text-white px-6 py-3 rounded border hover:bg-stone-100 hover:text-black hover:border-black"
+            >
+              Registrar Rostro
+            </button>
+            <button
+              onClick={() => router.push("/verify")}
+              className="bg-black text-white px-6 py-3 rounded border hover:bg-stone-100 hover:text-black  hover:border-black"
+            >
+              Verificar Rostro
+            </button>
+          </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }
