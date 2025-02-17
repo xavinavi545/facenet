@@ -26,18 +26,18 @@ services:
     volumes:
       - postgres_data_ia:/var/lib/postgresql/data
 
-  frontend:
-    build:
-      context: ./facenet-frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend-ia
-    volumes:
-      - ./facenet-frontend:/app  # Monta el código fuente local en el contenedor
-      - /app/node_modules        # Evita que los node_modules locales interfieran
+  # frontend:
+  #   build:
+  #     context: ./facenet-frontend
+  #     dockerfile: Dockerfile
+  #   container_name: frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend-ia
+  #   volumes:
+  #     - ./facenet-frontend:/app  # Monta el código fuente local en el contenedor
+  #     - /app/node_modules        # Evita que los node_modules locales interfieran
 
 volumes:
   postgres_data_ia:

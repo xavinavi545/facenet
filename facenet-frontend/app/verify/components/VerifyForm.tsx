@@ -2,7 +2,11 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 
-export default function VerifyForm() {
+interface VerifyProps {
+  isClosed: boolean;
+}
+
+export default function VerifyForm({isClosed}: VerifyProps) {
   const [message, setMessage] = useState("");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -55,6 +59,15 @@ export default function VerifyForm() {
     }
   }, [canvasRef, videoRef, handleSubmit]);
 
+  const closeCamera = () => {
+    const video = videoRef.current;
+      if (video && video.srcObject) {
+        const stream = video.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+        video.srcObject = null;
+      }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space" && isCameraOpen) {
@@ -64,6 +77,7 @@ export default function VerifyForm() {
       if (e.code === "KeyQ" && isCameraOpen) {
         e.preventDefault();
         setIsCameraOpen(false); // Cierra la cámara
+        closeCamera();
         setMessage("Acción cancelada.");
       }
     };
@@ -73,6 +87,12 @@ export default function VerifyForm() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [captureFrame, isCameraOpen]);
+
+  useEffect(() => {
+    if (isClosed) {
+      closeCamera();
+    }
+  }, [isClosed]);
 
   const openCamera = async () => {
     setIsCameraOpen(true);
@@ -89,28 +109,33 @@ export default function VerifyForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center">
       {!isCameraOpen && (
         <button
           onClick={openCamera}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          className="bg-black text-white px-4 py-2 rounded border hover:bg-stone-100 hover:text-black  hover:border-black"
         >
           Abrir Cámara
         </button>
       )}
 
       {isCameraOpen && (
-        <div>
+        <div className="flex flex-col items-center gap-8">
           <video
             ref={videoRef}
             autoPlay
-            className="mb-4 w-64 h-48 border"
+            className="mt-8 w-auto h-48 rounded border-2 border-black"
           ></video>
           <canvas ref={canvasRef} className="hidden" width={640} height={480} />
-          <p className="text-center">
-            Presiona <span className="font-bold">Espacio</span> para capturar la
-            imagen o <span className="font-bold">Q</span> para cancelar.
-          </p>
+          <div className="flex flex-col gap-2">
+            <p className="text-black text-center">
+              Presiona <span className="font-bold">Espacio</span> para capturar la
+              imagen
+            </p>
+            <p className="text-black text-center">
+              Presiona <span className="font-bold">Q</span> para cancelar.
+            </p>
+          </div>
         </div>
       )}
 
@@ -119,13 +144,20 @@ export default function VerifyForm() {
           open
           className="bg-white p-6 rounded shadow-lg border border-gray-300"
         >
-          <p>{message}</p>
-          <button
-            onClick={() => setMessage("")}
-            className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            Cerrar
-          </button>
+          <div className="flex flex-col justify-center items-center">
+            <p>{message}</p>
+            <button
+              onClick={
+                () => {
+                  closeCamera();
+                  setMessage("");
+                }
+              }
+              className="mt-4 bg-black text-white px-4 py-2  rounded border hover:bg-stone-100 hover:text-black  hover:border-black"
+            >
+              Cerrar
+            </button>
+          </div>
         </dialog>
       )}
     </div>

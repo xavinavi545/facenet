@@ -3,13 +3,15 @@
 import { useState } from "react";
 import RegisterForm from "./components/RegisterForm";
 import { IoArrowBackSharp } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [isClosed, setIsClosed] = useState(false);
+  const router = useRouter();
 
   const toogleClose = () => {
     setIsClosed(true);
-    window.history.back();
+    router.push("/");
   };
 
   return (

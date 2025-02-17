@@ -63,6 +63,15 @@ export default function RegisterForm({
     }
   }, [canvasRef, videoRef, handleSubmit]);
 
+  const closeCamera = () => {
+    const video = videoRef.current;
+    if (video && video.srcObject) {
+      const stream = video.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      video.srcObject = null;
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space" && isCameraOpen) {
@@ -72,6 +81,7 @@ export default function RegisterForm({
       if (e.code === "KeyQ" && isCameraOpen) {
         e.preventDefault();
         setIsCameraOpen(false); // Cierra la cámara
+        closeCamera();
         setMessage("Acción cancelada.");
       }
     };
@@ -84,12 +94,7 @@ export default function RegisterForm({
 
   useEffect(() => {
     if (isClosed) {
-      const video = videoRef.current;
-      if (video && video.srcObject) {
-        const stream = video.srcObject as MediaStream;
-        stream.getTracks().forEach((track) => track.stop());
-        video.srcObject = null;
-      }
+      closeCamera();
     }
   }, [isClosed]);
 
@@ -119,14 +124,6 @@ export default function RegisterForm({
             }}
             className="flex flex-col items-center"
           >
-            <input
-              type="text"
-              placeholder="Nombre"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="rounded border border-gray-500 p-2 mb-4 text-gray-700"
-              // required
-            />
             {!isCameraOpen && (
               <button
                 type="submit"
@@ -137,31 +134,52 @@ export default function RegisterForm({
             )}
           </form>
           {isCameraOpen && (
-            <div className="flex flex-col items-center">
+            <>
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="rounded border border-gray-500 p-2 mb-10 text-gray-700 w-80" /><div className="flex flex-col items-center gap-8">
               <video
                 ref={videoRef}
                 autoPlay
-                className="mt-8 mb-4 w-auto h-48 rounded border-2 border-black"
-              ></video>
+                className="mt-8 w-auto h-48 rounded border-2 border-black"
+              >
+              
+              </video>
               <canvas ref={canvasRef} className="hidden" width={640} height={480} />
-              <p className="text-black text-center">
-                Presiona <span className="font-bold">Espacio</span> para capturar la
-                imagen o <span className="font-bold">Q</span> para cancelar.
-              </p>
+              <div className="flex flex-col gap-2">
+                <p className="text-black text-center">
+                  Presiona <span className="font-bold">Espacio</span> para capturar la
+                  imagen
+                </p>
+                <p className="text-black text-center">
+                  Presiona <span className="font-bold">Q</span> para cancelar.
+                </p>
+              </div>
             </div>
+            </>
           )}
           {message && (
             <dialog
               open
               className="bg-white p-6 rounded shadow-lg border border-gray-300"
             >
-              <p>{message}</p>
-              <button
-                onClick={() => setMessage("")}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Cerrar
-              </button>
+              <div className="flex flex-col justify-center items-center">
+                <p>{message}</p>
+                <button
+                  onClick={
+                    () => {
+                      closeCamera();
+                      setMessage("");
+                    }
+                  }
+                  className="mt-4 bg-black text-white px-4 py-2  rounded border hover:bg-stone-100 hover:text-black  hover:border-black"
+                >
+                  Cerrar
+                </button>
+              </div>
             </dialog>
           )}
         </>
